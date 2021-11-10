@@ -2,6 +2,6 @@
 
 int main()
 {
-	printf("testbranche MODIFIED");
+	printf("test MODIFIED");
 	return 0;
 }
