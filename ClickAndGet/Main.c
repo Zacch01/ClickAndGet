@@ -26,9 +26,23 @@
 		char password[25];
 	}manager;
 
+	typedef struct customer
+	{
+		char last_name[25];
+		char first_name[25];
+		char user_name[25];
+		char phone[11];
+		int age;
+		char city[20];
+		char adress[50];
+		char password[25];
+	}customer;
+
 	void menu();
 	int register_manager();
-	int check(char last[25], char first[25], char user[25], char phone[11], int age, char password1[25], char password2[25]);
+	int register_customer();
+	int checkm(char last[25], char first[25], char user[25], char phone[11], int age, char password1[25], char password2[25]);
+	int checkc(char last[25], char first[25], char user[25], char phone[11], int age,char city[20],char adress[50], char password1[25], char password2[25]);
 	int termofuse();
 
 
@@ -62,14 +76,15 @@
 		//		login_manager();
 		//	else
 		//	{
-				if (register_manager() == 0)
-					return menu();
+				//if (register_manager() == 0)
+				//	return menu();
 		//	}
 		//else
 		//	if (connection == 2)
 		//		login_customer();
 		//	else
-		//		register_customer();
+				if(register_customer()==0)
+					return menu();
 	}
 
 	int register_manager()
@@ -94,7 +109,7 @@
 		scanf("%s", data.password);
 		printf("Write again your password: ");
 		scanf("%s", cpassword);
-		while (check(data.last_name, data.first_name, data.user_name, data.phone, data.age, data.password, cpassword) == 0)
+		while (checkm(data.last_name, data.first_name, data.user_name, data.phone, data.age, data.password, cpassword) == 0)
 		{
 			printf("\nOne of your information is incorrect. Please try again.\n");
 			printf("Last name (without characters): ");
@@ -116,12 +131,69 @@
 			return 0;
 
 		fseek(fic, 0, SEEK_END);
-		fprintf(fic, "\n %s;%s;%s;%s;%d;%s", data.last_name, data.first_name, data.user_name, data.phone, data.age, data.password);
+		fprintf(fic, "\n%s;%s;%s;%s;%d;%s", data.last_name, data.first_name, data.user_name, data.phone, data.age, data.password);
 		fclose(fic);
 		return 1;
 	}
 
-	int check(char last[25], char first[25], char user[25], char phone[11], int age, char password1[25], char password2[25])
+	int register_customer()
+	{
+		FILE* fic = fopen("CustomersInformation.csv", "r+");
+		if (fic == NULL)
+			exit(1);
+		char cpassword[25];
+		customer data;
+
+		printf("Last name (without characters): ");
+		scanf("%s", data.last_name);
+		printf("First name (without characters): ");
+		scanf("%s", data.first_name);
+		printf("User name: ");
+		scanf("%s", data.user_name);
+		printf("Phone number (must start with 05): ");
+		scanf("%s", data.phone);
+		printf("Age (must be under 120): ");
+		scanf_s("%d", &data.age);
+		printf("City (without characters): ");
+		scanf(" %[^\n]", data.city);
+		printf("Adress (without characters and one number): ");
+		scanf(" %[^\n]", data.adress);
+		printf("Password (must include one capital letter and minimum 6 characters): ");
+		scanf("%s", data.password);
+		printf("Write again your password: ");
+		scanf("%s", cpassword);
+		while (checkc(data.last_name, data.first_name, data.user_name, data.phone, data.age,data.city,data.adress, data.password, cpassword) == 0)
+		{
+			printf("\nOne of your information is incorrect. Please try again.\n");
+			printf("Last name (without characters): ");
+			scanf("%s", data.last_name);
+			printf("First name (without characters): ");
+			scanf("%s", data.first_name);
+			printf("User name: ");
+			scanf("%s", data.user_name);
+			printf("Phone number (must start with 05): ");
+			scanf("%s", data.phone);
+			printf("Age (must be under 120): ");
+			scanf_s("%d", &data.age);
+			printf("City (without characters): ");
+			scanf(" %[^\n]", data.city);
+			printf("Adress (without characters and one number): ");
+			scanf(" %[^\n]", data.adress);
+			printf("Password (must include one capital letter and minimum 6 characters): ");
+			scanf("%s", data.password);
+			printf("Write again your password: ");
+			scanf("%s", cpassword);
+		}
+		if (termofuse() == 0)
+			return 0;
+
+		fseek(fic, 0, SEEK_END);
+		fprintf(fic, "\n%s;%s;%s;%s;%d;%s;%s;%s", data.last_name, data.first_name, data.user_name, data.phone, data.age,data.city,data.adress, data.password);
+		fclose(fic);
+		return 1;
+	}
+
+	int checkm(char last[25], char first[25], char user[25], char phone[11], int age, char password1[25], char password2[25])
 	{
 		int cap_letter = 0;
 		for (int i = 0; i < strlen(last); i++)
@@ -145,12 +217,52 @@
 			return 0;
 		return 1;
 	}
+
+	int checkc(char last[25], char first[25], char user[25], char phone[11], int age, char city[20], char adress[50], char password1[25], char password2[25])
+	{
+		int cap_letter = 0,number=0;
+		for (int i = 0; i < strlen(last); i++)
+			if (last[i] < 'A' || last[i]>'z' || (last[i] > 'Z' && last[i] < 'a'))
+				return 0;
+		for (int i = 0; i < strlen(first); i++)
+			if (first[i] < 'A' || first[i]>'z' || (first[i] > 'Z' && first[i] < 'a'))
+				return 0;
+
+		if (phone[0] != '0' || phone[1] != '5' || age > 120 || strlen(password1) < 6 || strlen(password2) < 6 || strlen(password1) != strlen(password2) || phone[10] != '\0')
+			return 0;
+		for (int i = 2; i < 10; i++)
+			if (phone[i] < '0' || phone[i]>'9')
+				return 0;
+		for (int i = 0; i < strlen(city); i++)
+			if (city[i] < 'A' || city[i]>'z' || (city[i] > 'Z' && city[i] < 'a'))
+				return 0;
+
+		for (int i = 0; i < strlen(adress); i++)
+		{
+			if ((adress[i] < '0'&& adress[i]!=' ') || adress[i]>'z' || (adress[i] > 'Z' && adress[i] < 'a') || (adress[i] > '9' && adress[i] < 'A'))
+				return 0;
+			if (adress[i] >= '0' && adress[i] <= '9')
+				number++;
+		}
+		if (number == 0)
+			return 0;
+
+		for (int i = 0; i < strlen(password1); i++)
+			if (password1[i] >= 'A' && password1[i] <= 'Z')
+				cap_letter++;
+		if (cap_letter == 0)
+			return 0;
+		if (strcmp(password1, password2) != 0)
+			return 0;
+		return 1;
+	}
+
 	int termofuse()
 	{
 		int choice;
 		printf("\n\n1- Accept\t\t\t2- Deny\n");
 		scanf_s("%d", &choice);
-		while (choice!=0&&choice!=1)
+		while (choice!=1&&choice!=2)
 		{
 			printf("Bad choice. Try again\n");
 			scanf_s("%d", &choice);
