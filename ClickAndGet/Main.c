@@ -76,15 +76,15 @@
 		//		login_manager();
 		//	else
 		//	{
-				//if (register_manager() == 0)
-				//	return menu();
+				if (register_manager() == 0)
+					return menu();
 		//	}
 		//else
 		//	if (connection == 2)
 		//		login_customer();
 		//	else
-				if(register_customer()==0)
-					return menu();
+				//if(register_customer()==0)
+				//	return menu();
 	}
 
 	int register_manager()
@@ -95,23 +95,8 @@
 		char cpassword[25];
 		manager data;
 
-		printf("Last name (without characters): ");
-		scanf("%s", data.last_name);
-		printf("First name (without characters): ");
-		scanf("%s", data.first_name);
-		printf("User name: ");
-		scanf("%s", data.user_name);
-		printf("Phone number (must start with 05): ");
-		scanf("%s", data.phone);
-		printf("Age (must be under 120): ");
-		scanf_s("%d", &data.age);
-		printf("Password (must include one capital letter and minimum 6 characters): ");
-		scanf("%s", data.password);
-		printf("Write again your password: ");
-		scanf("%s", cpassword);
-		while (checkm(data.last_name, data.first_name, data.user_name, data.phone, data.age, data.password, cpassword) == 0)
+		do
 		{
-			printf("\nOne of your information is incorrect. Please try again.\n");
 			printf("Last name (without characters): ");
 			scanf("%s", data.last_name);
 			printf("First name (without characters): ");
@@ -126,7 +111,8 @@
 			scanf("%s", data.password);
 			printf("Write again your password: ");
 			scanf("%s", cpassword);
-		}
+		} while (checkm(data.last_name, data.first_name, data.user_name, data.phone, data.age, data.password, cpassword) == 0);
+
 		if (termofuse() == 0)
 			return 0;
 
@@ -144,27 +130,8 @@
 		char cpassword[25];
 		customer data;
 
-		printf("Last name (without characters): ");
-		scanf("%s", data.last_name);
-		printf("First name (without characters): ");
-		scanf("%s", data.first_name);
-		printf("User name: ");
-		scanf("%s", data.user_name);
-		printf("Phone number (must start with 05): ");
-		scanf("%s", data.phone);
-		printf("Age (must be under 120): ");
-		scanf_s("%d", &data.age);
-		printf("City (without characters): ");
-		scanf(" %[^\n]", data.city);
-		printf("Adress (without characters and one number): ");
-		scanf(" %[^\n]", data.adress);
-		printf("Password (must include one capital letter and minimum 6 characters): ");
-		scanf("%s", data.password);
-		printf("Write again your password: ");
-		scanf("%s", cpassword);
-		while (checkc(data.last_name, data.first_name, data.user_name, data.phone, data.age,data.city,data.adress, data.password, cpassword) == 0)
+		do
 		{
-			printf("\nOne of your information is incorrect. Please try again.\n");
 			printf("Last name (without characters): ");
 			scanf("%s", data.last_name);
 			printf("First name (without characters): ");
@@ -183,7 +150,8 @@
 			scanf("%s", data.password);
 			printf("Write again your password: ");
 			scanf("%s", cpassword);
-		}
+		} while (checkc(data.last_name, data.first_name, data.user_name, data.phone, data.age, data.city, data.adress, data.password, cpassword) == 0);
+
 		if (termofuse() == 0)
 			return 0;
 
@@ -197,24 +165,47 @@
 	{
 		int cap_letter = 0;
 		for (int i = 0; i < strlen(last); i++)
+		{
 			if (last[i] < 'A' || last[i]>'z' || (last[i] > 'Z' && last[i] < 'a'))
+			{
+				printf("\nYour last name is not correct. Please try again.\n");
 				return 0;
+			}
+		}
 		for (int i = 0; i < strlen(first); i++)
+		{
 			if (first[i] < 'A' || first[i]>'z' || (first[i] > 'Z' && first[i] < 'a'))
+			{
+				printf("\nYour first name is not correct. Please try again.\n");
 				return 0;
-
-		if (phone[0] != '0' || phone[1] != '5'||age>120||strlen(password1)<6 || strlen(password2) < 6 || strlen(password1) != strlen(password2)||phone[10]!='\0')
+			}
+		}
+		if (phone[0] != '0' || phone[1] != '5' ||phone[10]!='\0')
+		{
+			printf("\nYour phone number is not correct. Please try again.\n");
 			return 0;
+		}
+		if(age>120)
+		{
+			printf("\nYour age is not correct. Please try again.\n");
+			return 0;
+		}
 		for (int i = 2; i < 10; i++)
+		{
 			if (phone[i] < '0' || phone[i]>'9')
+			{
+				printf("\nYour phone number is not correct. Please try again.\n");
 				return 0;
+			}
+		}
 		for (int i = 0; i < strlen(password1); i++)
 			if (password1[i] >= 'A' && password1[i] <= 'Z')
 				cap_letter++;
-		if (cap_letter == 0)
+		if (strlen(password1) < 6 || strlen(password2) < 6 || strlen(password1) != strlen(password2)|| cap_letter == 0|| strcmp(password1, password2) != 0)
+		{
+			printf("\nYour password is not correct. Please try again.\n");
 			return 0;
-		if (strcmp(password1, password2) != 0)
-			return 0;
+		}
 		return 1;
 	}
 
@@ -222,38 +213,70 @@
 	{
 		int cap_letter = 0,number=0;
 		for (int i = 0; i < strlen(last); i++)
+		{
 			if (last[i] < 'A' || last[i]>'z' || (last[i] > 'Z' && last[i] < 'a'))
+			{
+				printf("\nYour last name is not correct. Please try again.\n");
 				return 0;
+			}
+		}
 		for (int i = 0; i < strlen(first); i++)
+		{
 			if (first[i] < 'A' || first[i]>'z' || (first[i] > 'Z' && first[i] < 'a'))
+			{
+				printf("\nYour first name is not correct. Please try again.\n");
 				return 0;
-
-		if (phone[0] != '0' || phone[1] != '5' || age > 120 || strlen(password1) < 6 || strlen(password2) < 6 || strlen(password1) != strlen(password2) || phone[10] != '\0')
+			}
+		}
+		if (phone[0] != '0' || phone[1] != '5' || phone[10] != '\0')
+		{
+			printf("\nYour phone number is not correct. Please try again.\n");
 			return 0;
+		}
 		for (int i = 2; i < 10; i++)
+		{
 			if (phone[i] < '0' || phone[i]>'9')
+			{
+				printf("\nYour phone number is not correct. Please try again.\n");
 				return 0;
+			}
+		}
+		if (age > 120)
+		{
+			printf("\nYour age is not correct. Please try again.\n");
+			return 0;
+		}
 		for (int i = 0; i < strlen(city); i++)
+		{
 			if (city[i] < 'A' || city[i]>'z' || (city[i] > 'Z' && city[i] < 'a'))
+			{
+				printf("\nYour city is not correct. Please try again.\n");
 				return 0;
-
+			}
+		}
 		for (int i = 0; i < strlen(adress); i++)
 		{
-			if ((adress[i] < '0'&& adress[i]!=' ') || adress[i]>'z' || (adress[i] > 'Z' && adress[i] < 'a') || (adress[i] > '9' && adress[i] < 'A'))
+			if ((adress[i] < '0' && adress[i] != ' ') || adress[i] > 'z' || (adress[i] > 'Z' && adress[i] < 'a') || (adress[i] > '9' && adress[i] < 'A'))
+			{
+				printf("\nYour adress is not correct. Please try again.\n");
 				return 0;
+			}
 			if (adress[i] >= '0' && adress[i] <= '9')
 				number++;
 		}
 		if (number == 0)
+		{
+			printf("\nYour age is not correct. Please try again.\n");
 			return 0;
-
+		}
 		for (int i = 0; i < strlen(password1); i++)
 			if (password1[i] >= 'A' && password1[i] <= 'Z')
 				cap_letter++;
-		if (cap_letter == 0)
+		if (strlen(password1) < 6 || strlen(password2) < 6 || strlen(password1) != strlen(password2) || cap_letter == 0 || strcmp(password1, password2) != 0)
+		{
+			printf("\nYour password is not correct. Please try again.\n");
 			return 0;
-		if (strcmp(password1, password2) != 0)
-			return 0;
+		}
 		return 1;
 	}
 
