@@ -44,6 +44,8 @@
 	int checkm(char last[25], char first[25], char user[25], char phone[11], int age, char password1[25], char password2[25]);
 	int checkc(char last[25], char first[25], char user[25], char phone[11], int age,char city[20],char adress[50], char password1[25], char password2[25]);
 	int termofuse();
+	int login_manager();
+	int login_customer();
 
 
 
@@ -71,20 +73,36 @@
 			scanf_s("%d", &connection);
 		}
 
-		//if (account == 1)
-		//	if (connection == 1)
-		//		login_manager();
-		//	else
-		//	{
+		if (account == 1)
+		{
+			if (connection == 1)
+			{
+				while (login_manager() == 0)
+					printf("\nYour user name or your password is not correct. Please try again.\n");
+				/*menu_manger();*/
+			}
+			else
+			{
 				if (register_manager() == 0)
-					return menu();
-		//	}
-		//else
-		//	if (connection == 2)
-		//		login_customer();
-		//	else
-				//if(register_customer()==0)
-				//	return menu();
+					printf("Please note, you hasn't been registered.\n");
+				return menu();
+
+			}
+		}
+		else
+		{
+			if (connection == 2)
+			{
+				while (login_customer() == 0)
+					printf("\nYour user name or your password is not correct. Please try again.\n");
+			}
+			else
+			{
+				if (register_customer() == 0)
+					printf("Please note, you hasn't been registered.\n");
+				return menu();
+			}
+		}
 	}
 
 	int register_manager()
@@ -293,4 +311,56 @@
 		if (choice == 2)
 			return 0;
 		return 1;
+	}
+
+	int login_manager() 
+	{
+		FILE* fic = fopen("ManagersInformation.csv", "r+");
+		if (fic == NULL)
+			exit(1);
+		char username1[25];
+		char password1[25];
+		manager data;
+		printf("User name: ");
+		scanf("%s", username1);
+		printf("Password: ");
+		scanf("%s", password1);
+		fseek(fic, 58, SEEK_SET);
+		do
+		{
+			fscanf(fic, "%[^;];%[^;];%[^;];%[^;];%d;%[^\n]\n", data.last_name, data.first_name, data.user_name, data.phone, &data.age, data.password);
+			if (strcmp(username1, data.user_name) == 0 && strcmp(password1, data.password) == 0)
+			{
+				fclose(fic);
+				return 1;
+			}
+		} while (!feof(fic));
+		fclose(fic);
+		return 0;
+	}
+
+	int login_customer()
+	{
+		FILE* fic = fopen("CustomersInformation.csv", "r+");
+		if (fic == NULL)
+			exit(1);
+		char username1[25];
+		char password1[25];
+		customer data;
+		printf("User name: ");
+		scanf("%s", username1);
+		printf("Password: ");
+		scanf("%s", password1);
+		fseek(fic, 70, SEEK_SET);
+		do
+		{
+			fscanf(fic, "%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%[^\n]\n", data.last_name, data.first_name, data.user_name, data.phone, &data.age, data.city,data.adress,data.password);
+			if (strcmp(username1, data.user_name) == 0 && strcmp(password1, data.password) == 0)
+			{
+				fclose(fic);
+				return 1;
+			}
+		} while (!feof(fic));
+		fclose(fic);
+		return 0;
 	}
