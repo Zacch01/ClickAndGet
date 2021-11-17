@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+//ILAN
+
 	/*FILE* fic = fopen("TestProjet.csv", "r+");
 		if (fic == NULL)
 			exit(1);*/
