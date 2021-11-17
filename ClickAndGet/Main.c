@@ -137,7 +137,7 @@
 			return 0;
 
 		fseek(fic, 0, SEEK_END);
-		fprintf(fic, "\n%s;%s;%s;%s;%d;%s", data.last_name, data.first_name, data.user_name, data.phone, data.age, data.password);
+		fprintf(fic, "\n%s,%s,%s,%s,%d,%s", data.last_name, data.first_name, data.user_name, data.phone, data.age, data.password);
 		fclose(fic);
 		return 1;
 	}
@@ -176,7 +176,7 @@
 			return 0;
 
 		fseek(fic, 0, SEEK_END);
-		fprintf(fic, "\n%s;%s;%s;%s;%d;%s;%s;%s", data.last_name, data.first_name, data.user_name, data.phone, data.age,data.city,data.adress, data.password);
+		fprintf(fic, "\n%s,%s,%s,%s,%d,%s,%s,%s", data.last_name, data.first_name, data.user_name, data.phone, data.age,data.city,data.adress, data.password);
 		fclose(fic);
 		return 1;
 	}
@@ -330,7 +330,7 @@
 		fseek(fic, 58, SEEK_SET);
 		do
 		{
-			fscanf(fic, "%[^;];%[^;];%[^;];%[^;];%d;%[^\n]\n", data.last_name, data.first_name, data.user_name, data.phone, &data.age, data.password);
+			fscanf(fic, "%[^,],%[^,],%[^,],%[^,],%d,%[^\n]\n", data.last_name, data.first_name, data.user_name, data.phone, &data.age, data.password);
 			if (strcmp(username1, data.user_name) == 0 && strcmp(password1, data.password) == 0)
 			{
 				fclose(fic);
@@ -356,7 +356,7 @@
 		fseek(fic, 70, SEEK_SET);
 		do
 		{
-			fscanf(fic, "%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%[^\n]\n", data.last_name, data.first_name, data.user_name, data.phone, &data.age, data.city,data.adress,data.password);
+			fscanf(fic, "%[^,],%[^,],%[^,],%[^,],%d,%[^,],%[^,],%[^\n]\n", data.last_name, data.first_name, data.user_name, data.phone, &data.age, data.city,data.adress,data.password);
 			if (strcmp(username1, data.user_name) == 0 && strcmp(password1, data.password) == 0)
 			{
 				fclose(fic);
